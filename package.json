@@ -1,0 +1,12 @@
+{
+  "name": "precision-engineering-website",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Precision Engineering — corporate B2B website (static, no build step)",
+  "scripts": {
+    "dev": "vite --port 8000"
+  },
+  "devDependencies": {
+    "vite": "^8.1.4"
+  }
+}
