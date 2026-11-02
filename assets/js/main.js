@@ -93,19 +93,37 @@
     counters.forEach((el) => (el.textContent = el.dataset.count));
   }
 
-  /* ---------- Inquiry form ---------- */
+  /* ---------- Inquiry form ----------
+     The site is static (no server), so the form hands the enquiry to the
+     visitor's email app or WhatsApp, already filled in, addressed to us. */
   const form = document.querySelector("#inquiry-form");
   if (form) {
+    let via = "email";
+    form.querySelectorAll("[data-via]").forEach((b) =>
+      b.addEventListener("click", () => { via = b.dataset.via; })
+    );
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       if (!form.checkValidity()) {
         form.reportValidity();
         return;
       }
+      const v = (n) => (form.elements[n] ? form.elements[n].value.trim() : "");
+      const lines = ["Enquiry from the Precision Engineering website", "",
+        "Name: " + v("name"), "Company: " + v("company"), "Phone: " + v("phone")];
+      if (v("email")) lines.push("Email: " + v("email"));
+      lines.push("Service: " + v("service"), "", "Requirement:", v("message"));
+      const body = lines.join("\n");
+      if (via === "wa") {
+        window.open("https://wa.me/" + form.dataset.wa + "?text=" + encodeURIComponent(body), "_blank", "noopener");
+      } else {
+        const subject = "Quote request — " + v("service") + " — " + v("company");
+        window.location.href = "mailto:" + form.dataset.email +
+          "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+      }
       const card = form.closest(".form-card");
       card.classList.add("sent");
       card.querySelector(".form-success").classList.add("show");
-      card.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
     });
   }
 
