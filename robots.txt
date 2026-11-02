@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://precision-engineering.co.in/sitemap.xml
